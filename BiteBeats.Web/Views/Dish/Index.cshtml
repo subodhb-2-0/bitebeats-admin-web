@@ -1,0 +1,425 @@
+﻿@using BiteBeats.Core.Entities.ViewModel
+@model IEnumerable<DishVM>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="RestaurantIndex">
+                <div class="page-header">
+                    <h5 class="page-title d-inline">Restaurants > Surya Dhaba > Breakfast > Veg > Dishes</h5>
+                </div>
+                <div class="row">
+                    <div class="col-sm-9"></div>
+                    <div class="col-sm-3">
+                        <a asp-action="Create" class="d-inline btn btn-secondary float-end" data-bs-toggle="modal" data-bs-target="#createDishesModal"> + New Section</a>
+                    </div>
+                </div>
+                <div class="page-body mt-4">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Dish</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(var Dish in Model)
+                                {
+                                    <tr>
+                                        <td><img src="@Dish.Image" /></td>
+                                        <td><a id="restaurant-id" asp-action="Details">@Dish.Name</a></td>
+                                        <td>@Dish.Description</td>
+                                        <td>@Dish.Price</td>    
+                                        <td class="text-center">
+                                            <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#dishesOptionModal-@Dish.Id" data-id="@Dish.Id">Options</button>
+                                            <i class="far fa-pen-to-square edit-icon" data-bs-toggle="modal" data-bs-target="#editDishesModal-@Dish.Id" data-id="@Dish.Id"></i>
+                                            <i class="fa-solid fa-trash delete-icon dish-delete" id="dish-delete-@Dish.Id" data-id="@Dish.Id"></i>
+                                        </td>
+                                    </tr>
+
+
+                                    @* Options Modal *@
+                                    <div class="modal fade" id="dishesOptionModal-@Dish.Id" tabindex="-1" aria-labelledby="dishesOptionModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="dishesOptionModalLabel">@Dish.Name Option</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-sm-9"></div>
+                                                        <div class="col-sm-3">
+                                                            <button id="addChoice" class="btn btn-secondary float-end mb-1">+ New Choice</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <!-- Add radio buttons to select choice or size -->
+                                                                    <h4 class="mb-4">Type</h4>
+                                                                    <div class="px-3">
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input" type="radio" name="optionType" id="size" checked>
+                                                                            <label class="form-check-label" for="size">
+                                                                                Size
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input" type="radio" name="optionType" id="extras">
+                                                                            <label class="form-check-label" for="extras">
+                                                                                Extras
+                                                                            </label>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-9">
+                                                                    <div class="row">
+                                                                        <div id="extraItems" class="col-md-12" style="display:none;">
+                                                                            @foreach(var extra in Dish.Extras)
+                                                                            {
+                                                                                <div class="row">
+                                                                                    <div class="form-group col-md-7">
+                                                                                        <label for="extraItem">Extra Item</label>
+                                                                                        <input type="text" class="form-control" id="extraItem" placeholder="Extra Item" value="@extra.Name">
+                                                                                    </div>
+                                                                                    <div class=" form-group col-md-3">
+                                                                                        <label for="extraItemPrice">Price</label>
+                                                                                        <input type="text" class="form-control" id="extraItemPrice" placeholder="Price" value="@extra.Price">
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div id="dishSize" class="col-md-12">
+                                                                            @foreach(var size in Dish.Sizes)
+                                                                            {
+                                                                                <div class="row">
+                                                                                    <div class="form-group col-md-7">
+                                                                                        <label for="size">Size</label>
+                                                                                        <input type="text" class="form-control" id="size" placeholder="Size" value="@size.Name">
+                                                                                    </div>
+                                                                                    <div class=" form-group col-md-3">
+                                                                                        <label for="sizePrice">Price</label>
+                                                                                        <input type="text" class="form-control" id="sizePrice" placeholder="Price" value="@size.Price">
+                                                                                    </div>
+                                                                                </div>
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="button" class="btn btn-primary">Add</button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @* Edit Modal *@
+                                    <div class="modal fade" id="editDishesModal-@Dish.Id" tabindex="-1" aria-labelledby="editDishesModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="editDishesModalLabel">Edit Sub Menu</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="createDishes-image-section">
+                                                                        <!-- Image preview -->
+                                                                        <img src="" id="DishesImagePreview" class="img-fluid mb-3" alt="Preview" style="min-height: 200px;">
+
+                                                                        <!-- Image upload input -->
+                                                                        <input type="file" class="form-control mb-3" id="DishesImage">
+                                                                        @* <button class="btn btn-primary">Choose Image Files</button> *@
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="editDishes-input-section">
+                                                                        <div class="mb-3">
+                                                                            <label for="editDishesDetails" class="form-label">Dish Name</label>
+                                                                            <input type="text" class="form-control" id="editDishesDetails" name="Name" value="@Dish.Name">
+                                                                        </div>
+                                                                        <div class="mb-1">
+                                                                            <label for="editDishesDescription" class="form-label">Dish Description</label>
+                                                                            <textarea class="form-control" id="editDishesDescription" rows="5" name="Description">@Dish.Description</textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="button" class="btn btn-primary dish-edit" id="dish-edit-@Dish.Id" data-id="@Dish.Id">Save changes</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @* Create Modal *@
+                    <div class="modal fade" id="createDishesModal" tabindex="-1" aria-labelledby="createDishesModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="createDishesModalLabel">New Sub Section</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="Dishes-image-section">
+                                                        <!-- Image preview -->
+                                                        <img src="" id="createDishesImagePreview" class="img-fluid mb-3" alt="Preview" style="min-height: 200px;">
+
+                                                        <!-- Image upload input -->
+                                                        <input type="file" class="form-control mb-3" id="createDishesImage">
+                                                        @* <button class="btn btn-primary">Choose Image Files</button> *@
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="createDishes-input-section">
+                                                        <div class="mb-3">
+                                                            <label for="createDishesDetails" class="form-label">Sub Section Name</label>
+                                                            <input type="text" class="form-control" id="createDishesDetails">
+                                                        </div>
+                                                        <div class="mb-1">
+                                                            <label for="createDishesDescription" class="form-label">Description</label>
+                                                            <textarea class="form-control" id="createDishesDescription" rows="5"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-primary dish-create">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        // Get the radio buttons
+        const sizeRadio = document.getElementById('size');
+        const extrasRadio = document.getElementById('extras');
+
+        // Get the extra items and dish size sections
+        const extraItemsSection = document.getElementById('extraItems');
+        const dishSizeSection = document.getElementById('dishSize');
+
+        // Add event listeners to the radio buttons
+        sizeRadio.addEventListener('change', function () {
+            // Show the dish size section and hide the extra items section
+            extraItemsSection.style.display = 'none';
+            dishSizeSection.style.display = 'block';
+        });
+
+        extrasRadio.addEventListener('change', function () {
+            // Show the extra items section and hide the dish size section
+            extraItemsSection.style.display = 'block';
+            dishSizeSection.style.display = 'none';
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+
+            // delete dish
+            $('.dish-delete').click(function () {
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: "btn btn-success mx-2",
+                        cancelButton: "btn btn-danger mx-2"
+                    },
+                    buttonsStyling: false
+                });
+                swalWithBootstrapButtons.fire({
+                    title: "Are you sure you want to delete?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "No, cancel!",
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        debugger
+                        var id = $(this).data('id');
+
+                        $.ajax({
+                            url: '/Dish/Delete/' + $(this).data('id'),
+                            type: 'POST',
+                            processData: false,
+                            contentType: false,
+                            success: function (response) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Menu has been successfully deleted.",
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(xhr.responseText);
+
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Error occurred while deleting the menu.",
+                                    text: "Please try again later.",
+                                    confirmButtonText: "Ok"
+                                });
+                            }
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire({
+                            title: "Cancelled",
+                            text: "You have cancelled deletion.",
+                            icon: "error"
+                        });
+                    }
+                });
+            });
+
+
+            // edit dish
+            $('.dish-edit').click(function () {
+                Swal.fire({
+                    title: "Do you want to save the changes?",
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Save",
+                    denyButtonText: `Don't save`
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        var modal = $(this).closest('.modal');
+
+                        var dishImage = modal.find('#DishesImage').prop('files')[0];
+                        var dishDetails = modal.find('#editDishesDetails').val();
+                        var dishDescription = modal.find('#editDishesDescription').val();
+
+                        // Create form data object
+                        var formData = new FormData();
+                        formData.append('Name', dishDetails);
+                        formData.append('Description', dishDescription);
+                        formData.append('ImageFile', dishImage);
+                        formData.append('Id', $(this).data('id'));
+
+                        $.ajax({
+                            url: '/Dish/Edit/' + $(this).data('id'),
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function (response) {
+                                console.log(response);
+
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Dish has been successfully edited.",
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                                modal.modal('hide');
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(xhr.responseText);
+
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Error occurred while editing the dish.",
+                                    text: "Please try again later.",
+                                    confirmButtonText: "Ok"
+                                });
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire("Changes are not saved", "", "info");
+                    }
+                });
+            });
+
+
+            // create dish
+            $('.dish-create').click(function () {
+                var dishesImage = $('#createDishesImage').prop('files')[0];
+                var dishesDetails = $('#createDishesDetails').val();
+                var dishesDescription = $('#createDishesDescription').val();
+
+                var formData = new FormData();
+                formData.append('Name', dishesDetails);
+                formData.append('Description', dishesDescription);
+                formData.append('ImageFile', dishesImage);
+
+                $.ajax({
+                    url: '/Dish/Create',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+
+                        $('#createDishesDetails').val('');
+                        $('#createDishesDescription').val('');
+                        $('#createDishesImage').val('');
+                        $('#createDishesImagePreview').attr('src', '');
+
+                        Swal.fire({
+                            icon: "success",
+                            title: "Dishes has been successfully added.",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error occurred while adding the dish.",
+                            text: "Please try again later.",
+                            confirmButtonText: "Ok"
+                        });
+                    }
+                });
+
+            });
+        });
+    </script>
+}

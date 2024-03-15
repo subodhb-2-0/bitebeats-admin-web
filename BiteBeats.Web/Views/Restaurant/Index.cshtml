@@ -1,0 +1,97 @@
+﻿@using BiteBeats.Core.Entities.ViewModel
+@model IEnumerable<RestaurantVM>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="RestaurantIndex">
+                <div class="page-header">
+                    <h2 class="page-title d-inline">Restaurants</h2>
+                </div>
+                <div class="row">
+                    <div class="col-sm-9"></div>
+                    <div class="col-sm-3">
+                        <a asp-action="Create" class="d-inline btn btn-secondary float-end"> + Add Restaurant</a>
+                    </div>
+                </div>
+                <div class="page-body mt-4">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Restaurant Name</th>
+                                    <th scope="col">Rest. Ph. No.</th>
+                                    <th scope="col">Manager Name</th>
+                                    <th scope="col">Manager Ph. No</th>
+                                    <th scope="col">Owner Name</th>
+                                    <th scope="col">City</th>
+                                    <th scope="col">Menu</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var restaurant in Model)
+                                {
+                                    <tr>
+                                        <td><a id="restaurant-id" asp-action="Details" asp-route-restaurantId="@restaurant.Id">@restaurant.Name</a></td>
+                                        <td>@restaurant.PhoneNumber</td>
+                                        <td>@restaurant.ManagerName</td>
+                                        <td>@restaurant.ManagerPhoneNumber</td>
+                                        <td>@restaurant.OwnerName</td>
+                                        <td>@restaurant.City</td>
+                                        <td><a asp-action="Index" asp-controller="Menu" asp-route-restaurantId="@restaurant.Id">View</a></td>
+                                        <td class="text-center">
+                                            <i class="fa-regular fa-pen-to-square edit-icon restaurant-edit" id="restaurant-edit-@restaurant.Id"></i>
+                                            <i class="fa-solid fa-trash delete-icon restaurant-delete" id="restaurant-delete-@restaurant.Id"></i>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.restaurant-delete').click(function () {
+                debugger
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: "btn btn-success mx-2",
+                        cancelButton: "btn btn-danger mx-2"
+                    },
+                    buttonsStyling: false
+                });
+                swalWithBootstrapButtons.fire({
+                    title: "Are you sure you want to delete?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "No, cancel!",
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        swalWithBootstrapButtons.fire({
+                            title: "Deleted!",
+                            text: "Deletion has been successful.",
+                            icon: "success"
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire({
+                            title: "Cancelled",
+                            text: "You have cancelled deletion.",
+                            icon: "error"
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -1,0 +1,312 @@
+﻿@using BiteBeats.Core.Entities.ViewModel
+@model IEnumerable<MenuVM>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="RestaurantIndex">
+                <div class="page-header">
+                    <h5 class="page-title d-inline">Restaurants > Surya Dhaba > Menu</h5>
+                </div>
+                <div class="row">
+                    <div class="col-sm-9"></div>
+                    <div class="col-sm-3">
+                        <a asp-action="Create" class="d-inline btn btn-secondary float-end" data-bs-toggle="modal" data-bs-target="#createMenuModal"> + New Menu</a>
+                    </div>
+                </div>
+                <div class="page-body mt-4">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Menu</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var Menu in Model)
+                                {
+                                    <tr>
+                                        <td><img src="@Menu.Image" /></td>
+                                        <td><a id="menuName" asp-action="Index" asp-controller="SubSection" asp-route-menuId="@Menu.Id">@Menu.Name</a></td>
+                                        <td>@Menu.Description </td>
+                                        <td class="text-center">
+                                            <i class="far fa-pen-to-square edit-icon" data-bs-toggle="modal" data-bs-target="#editMenuModal-@Menu.Id" data-id="@Menu.Id"></i>
+                                            <i class="fa-solid fa-trash delete-icon menu-delete" id="menu-delete-@Menu.Id" data-id="@Menu.Id"></i>
+                                        </td>
+                                    </tr>
+
+
+                                    @* Edit Modal *@
+                                    <div class="modal fade" id="editMenuModal-@Menu.Id" tabindex="-1" aria-labelledby="editMenuModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="editMenuModalLabel">Edit Menu</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="editmenu-image-section">
+                                                                        <!-- Image preview -->
+                                                                        <img src="@Menu.Image" id="editMenuImagePreview" class="img-fluid mb-3" alt="Preview" style="min-height: 200px;">
+
+                                                                        <!-- Image upload input -->
+                                                                        <input type="file" class="form-control mb-3" id="editMenuImage">
+                                                                        @* <button class="btn btn-primary">Choose Image Files</button> *@
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="editmenu-input-section">
+                                                                        <div class="mb-3">
+                                                                            <label for="editMenuDetails" class="form-label">Menu Details</label>
+                                                                            <input type="text" class="form-control" id="editMenuDetails" name="Name" value="@Menu.Name">
+                                                                        </div>
+                                                                        <div class="mb-1">
+                                                                            <label for="editMenuDescription" class="form-label">Menu Description</label>
+                                                                            <textarea class="form-control" id="editMenuDescription" rows="5" name="Description">@Menu.Description</textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="button" class="btn btn-primary menu-edit" id="menu-edit-@Menu.Id" data-id="@Menu.Id">Save changes</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    @* Create Modal *@
+                    <div class="modal fade" id="createMenuModal" tabindex="-1" aria-labelledby="createMenuModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="createMenuModalLabel">New Menu</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="createmenu-image-section">
+                                                            <!-- Image preview -->
+                                                            <img src="" id="menuImagePreview" class="img-fluid mb-3" alt="Preview" style="min-height: 200px;">
+
+                                                            <!-- Image upload input -->
+                                                            <input type="file" class="form-control mb-3" id="menuImage" name="ImageFile">
+                                                            @* <button class="btn btn-primary">Choose Image Files</button> *@
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="createmenu-input-section">
+                                                            <div class="mb-3">
+                                                                <label for="createMenuDetails" class="form-label">Menu Details</label>
+                                                                <input type="text" class="form-control" id="createMenuDetails" name="Name">
+                                                            </div>
+                                                            <div class="mb-1">
+                                                                <label for="createMenuDescription" class="form-label">Menu Description</label>
+                                                                <textarea class="form-control" id="createMenuDescription" rows="5" name="Description"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary menu-create">Create Menu</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            // delete menu
+            $('.menu-delete').click(function () {
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: "btn btn-success mx-2",
+                        cancelButton: "btn btn-danger mx-2"
+                    },
+                    buttonsStyling: false
+                });
+                swalWithBootstrapButtons.fire({
+                    title: "Are you sure you want to delete?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "No, cancel!",
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        debugger
+                        var id = $(this).data('id');
+
+                        $.ajax({
+                            url: '/Menu/Delete/' + $(this).data('id'),
+                            type: 'POST',
+                            processData: false,
+                            contentType: false,
+                            success: function (response) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Menu has been successfully deleted.",
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(xhr.responseText);
+
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Error occurred while deleting the menu.",
+                                    text: "Please try again later.",
+                                    confirmButtonText: "Ok"
+                                });
+                            }
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire({
+                            title: "Cancelled",
+                            text: "You have cancelled deletion.",
+                            icon: "error"
+                        });
+                    }
+                });
+            });
+
+
+            // edit menu
+            $('.menu-edit').click(function () {
+
+                Swal.fire({
+                    title: "Do you want to save the changes?",
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Save",
+                    denyButtonText: `Don't save`
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        var modal = $(this).closest('.modal');
+
+                        var menuImage = modal.find('#editMenuImage').prop('files')[0];
+                        var menuDetails = modal.find('#editMenuDetails').val();
+                        var menuDescription = modal.find('#editMenuDescription').val();
+
+                        // Create form data object
+                        var formData = new FormData();
+                        formData.append('Name', menuDetails);
+                        formData.append('Description', menuDescription);
+                        formData.append('ImageFile', menuImage);
+                        formData.append('Id', $(this).data('id'));
+
+                        $.ajax({
+                            url: '/Menu/Edit/' + $(this).data('id'),
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function (response) {
+                                console.log(response);
+
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Menu has been successfully edited.",
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                                modal.modal('hide');
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(xhr.responseText);
+
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Error occurred while editing the menu.",
+                                    text: "Please try again later.",
+                                    confirmButtonText: "Ok"
+                                });
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire("Changes are not saved", "", "info");
+                    }
+                });
+            });
+
+
+            // create menu
+            $('.menu-create').click(function () {
+                var menuImage = $('#menuImage').prop('files')[0];
+                var menuDetails = $('#createMenuDetails').val();
+                var menuDescription = $('#createMenuDescription').val();
+                
+                var formData = new FormData();
+                formData.append('Name', menuDetails);
+                formData.append('Description', menuDescription);
+                formData.append('ImageFile', menuImage);
+
+                $.ajax({
+                    url: '/Menu/Create',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+
+                        $('#createMenuDetails').val('');
+                        $('#createMenuDescription').val('');
+                        $('#menuImage').val('');
+                        $('#menuImagePreview').attr('src', '');
+
+                        Swal.fire({
+                            icon: "success",
+                            title: "Menu has been successfully added.",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error occurred while adding the menu.",
+                            text: "Please try again later.",
+                            confirmButtonText: "Ok"
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

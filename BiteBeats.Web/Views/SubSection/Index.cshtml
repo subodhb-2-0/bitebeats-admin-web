@@ -1,0 +1,310 @@
+﻿@using BiteBeats.Core.Entities.ViewModel
+@model IEnumerable<SubSectionVM>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="RestaurantIndex">
+                <div class="page-header">
+                    <h5 class="page-title d-inline">Restaurants > Surya Dhaba > Breakfast > Sub Section</h5>
+                </div>
+                <div class="row">
+                    <div class="col-sm-9"></div>
+                    <div class="col-sm-3">
+                        <a asp-action="Create" class="d-inline btn btn-secondary float-end" data-bs-toggle="modal" data-bs-target="#createMenuSubSectionModal"> + New Section</a>
+                    </div>
+                </div>
+                <div class="page-body mt-4">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Menu</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var SubSection in Model)
+                                {
+                                    <tr>
+                                        <td><img src="@SubSection.Image" /></td>
+                                        <td><a id="subSectionName" asp-controller="Dish" asp-action="Index" asp-route-subSectionId="@SubSection.Id">@SubSection.Name</a></td>
+                                        <td>@SubSection.Description </td>
+                                        <td class="text-center">
+                                            <i class="far fa-pen-to-square edit-icon" data-bs-toggle="modal" data-bs-target="#editMenuSubSectionModal-@SubSection.Id" data-id="@SubSection.Id"></i>
+                                            <i class="fa-solid fa-trash delete-icon subsection-delete" id="subsection-delete-@SubSection.Id" data-id="@SubSection.Id"></i>
+                                        </td>
+                                    </tr>
+
+
+                                    @* Edit Modal *@
+                                    <div class="modal fade" id="editMenuSubSectionModal-@SubSection.Id" tabindex="-1" aria-labelledby="editMenuSubSectionModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="editMenuSubSectionModalLabel">Edit Sub Menu</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="createmenusubsection-image-section">
+                                                                        <!-- Image preview -->
+                                                                        <img src="@SubSection.Image" id="menuSubSectionImagePreview" class="img-fluid mb-3" alt="Preview" style="min-height: 200px;">
+
+                                                                        <!-- Image upload input -->
+                                                                        <input type="file" class="form-control mb-3" id="menuSubSectionImage">
+                                                                        @* <button class="btn btn-primary">Choose Image Files</button> *@
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="editmenusubsection-input-section">
+                                                                        <div class="mb-3">
+                                                                            <label for="editMenuSubSectionDetails" class="form-label">Sub Section Name</label>
+                                                                            <input type="text" class="form-control" id="editMenuSubSectionDetails" name="Name" value="@SubSection.Name">
+                                                                        </div>
+                                                                        <div class="mb-1">
+                                                                            <label for="editMenuSubSectionDescription" class="form-label">Sub Section Description</label>
+                                                                            <textarea class="form-control" id="editMenuSubSectionDescription" name="Description" rows="5">@SubSection.Description</textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="button" class="btn btn-primary subsection-edit" id="subsection-edit-@SubSection.Id" data-id="@SubSection.Id">Save changes</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                    @* Create Modal *@
+                    <div class="modal fade" id="createMenuSubSectionModal" tabindex="-1" aria-labelledby="createMenuSubSectionModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="createMenuSubSectionModalLabel">New Sub Section</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="menusubsection-image-section">
+                                                        <!-- Image preview -->
+                                                        <img src="" id="createMenuSubSectionImagePreview" class="img-fluid mb-3" alt="Preview" style="min-height: 200px;">
+
+                                                        <!-- Image upload input -->
+                                                        <input type="file" class="form-control mb-3" id="createMenuSubSectionImage">
+                                                        @* <button class="btn btn-primary">Choose Image Files</button> *@
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="createmenusubsection-input-section">
+                                                        <div class="mb-3">
+                                                            <label for="createMenuSubSectionDetails" class="form-label">Sub Section Name</label>
+                                                            <input type="text" class="form-control" id="createMenuSubSectionDetails">
+                                                        </div>
+                                                        <div class="mb-1">
+                                                            <label for="createMenuSubSectionDescription" class="form-label">Description</label>
+                                                            <textarea class="form-control" id="createMenuSubSectionDescription" rows="5"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-primary subsection-create">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            // delete subsection
+            $('.subsection-delete').click(function () {
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: "btn btn-success mx-2",
+                        cancelButton: "btn btn-danger mx-2"
+                    },
+                    buttonsStyling: false
+                });
+                swalWithBootstrapButtons.fire({
+                    title: "Are you sure you want to delete?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "No, cancel!",
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        debugger
+                        var id = $(this).data('id');
+
+                        $.ajax({
+                            url: '/SubSection/Delete/' + $(this).data('id'),
+                            type: 'POST',
+                            processData: false,
+                            contentType: false,
+                            success: function (response) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Menu has been successfully deleted.",
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(xhr.responseText);
+
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Error occurred while deleting the menu.",
+                                    text: "Please try again later.",
+                                    confirmButtonText: "Ok"
+                                });
+                            }
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire({
+                            title: "Cancelled",
+                            text: "You have cancelled deletion.",
+                            icon: "error"
+                        });
+                    }
+                });
+            });
+
+
+            // edit subsection
+            $('.subsection-edit').click(function () {
+                Swal.fire({
+                    title: "Do you want to save the changes?",
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Save",
+                    denyButtonText: `Don't save`
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        var modal = $(this).closest('.modal');
+
+                        var menuSubSectionImage = modal.find('#menuSubSectionImage').prop('files')[0];
+                        var menuSubSectionDetails = modal.find('#editMenuSubSectionDetails').val();
+                        var menuSubSectionDescription = modal.find('#editMenuSubSectionDescription').val();
+
+                        // Create form data object
+                        var formData = new FormData();
+                        formData.append('Name', menuSubSectionDetails);
+                        formData.append('Description', menuSubSectionDescription);
+                        formData.append('ImageFile', menuSubSectionImage);
+                        formData.append('Id', $(this).data('id'));
+
+                        $.ajax({
+                            url: '/SubSection/Edit/' + $(this).data('id'),
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function (response) {
+                                console.log(response);
+
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Menu has been successfully edited.",
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                                modal.modal('hide');
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(xhr.responseText);
+
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Error occurred while editing the menu.",
+                                    text: "Please try again later.",
+                                    confirmButtonText: "Ok"
+                                });
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire("Changes are not saved", "", "info");
+                    }
+                });
+            });
+
+
+            // create subsection
+            $('.subsection-create').click(function () {
+                var menuSubSectionImage = $('#createMenuSubSectionImage').prop('files')[0];
+                var menuSubSectionDetails = $('#createMenuSubSectionDetails').val();
+                var menuSubSectionDescription = $('#createMenuSubSectionDescription').val();
+
+                var formData = new FormData();
+                formData.append('Name', menuSubSectionDetails);
+                formData.append('Description', menuSubSectionDescription);
+                formData.append('ImageFile', menuSubSectionImage);
+
+                $.ajax({
+                    url: '/SubSection/Create',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+
+                        $('#createMenuSubSectionDetails').val('');
+                        $('#createMenuSubSectionDescription').val('');
+                        $('#createMenuSubSectionImage').val('');
+                        $('#createMenuSubSectionImagePreview').attr('src', '');
+
+                        Swal.fire({
+                            icon: "success",
+                            title: "Menu Sub Section has been successfully added.",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error occurred while adding the menu sub section.",
+                            text: "Please try again later.",
+                            confirmButtonText: "Ok"
+                        });
+                    }
+                });
+
+            });
+        });
+    </script>
+}

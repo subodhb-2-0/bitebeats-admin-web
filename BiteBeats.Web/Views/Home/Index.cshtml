@@ -1,0 +1,8 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+<h5 class="card-title text-center mb-5 fw-light fs-5">Sign In to BiteBeats</h5>
+<div id="firebaseui-auth-container"></div>
+<div id="loader">Loading...</div>
+<button onclick="refreshFirebaseToken()"> Refresh Token</button>
